@@ -10,5 +10,11 @@
   "license": "ISC",
   "devDependencies": {
     "jest": "^27.4.3"
+  },
+  "jest":{
+    "testEnvironment":"node"
+  },
+  "eslintConfig":{
+    "env":{"jest":true}
   }
 }

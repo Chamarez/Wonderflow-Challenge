@@ -1,29 +1,46 @@
-const firstExample = '14:24:32 Customer : Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-const secondExample = '14:24:32 Customer : Lorem ipsum dolor sit amet, consectetur adipiscing elit. /n 14:26:15 Agent : Aliquam non cursus erat, ut blandit lectus.'
+const firstExample =
+  "14:24:32 Customer : Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+const secondExample =
+  "14:24:32 Customer : Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n14:26:15 Agent : Aliquam non cursus erat, ut blandit lectus.";
 
-const textIntoObject = (string)=>{
-    const spliter = string.split(": ", 1);
-    console.log(spliter)
-    const date = (spliter[0].substring(0, 8));
-    const type = spliter[0].substring(9, spliter[0].length-1);
-    console.log(date)
-    console.log(type)
-    return [{
-        date: date, 
-        mention: spliter[0] + ": ", 
-        sentense:spliter[1],
-        type: type
-    }]
-}
-
-console.log(textIntoObject(firstExample));
+///`hh:mm:ss`, `customer/agent name`, `:` and `sentence`
+const dateReg = /(\d{2}:\d{2}:\d{2})/;
+const mentionReg = /(.+\s:\s)/;
+const sentenceReg = /(.+):(.+)/;
+const typesReg = /\s.+\s:/;
+const allReg =  /(?<date>\d{2}:\d{2}:\d{2}) (?<person>.+) : (?<text>.+)$/
 
 
 
-const result = [{
-    date: '14:24:32',
-    mention: '14:24:32 Customer : ',
-    sentence: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    type: 'customer'
-  }]
+const textIntoObject = (string) => {
+  mention = string.match(mentionReg);
+  allr = string.match(allReg)
+  const spliter = string.split(": ");
+
+  const type = spliter[0].substring(9, spliter[0].length - 1);
+  const result = {
+    date: allr.groups.date,
+    mention: mention[0],
+    sentence: allr.groups.text,
+    type: allr.groups.person.toLowerCase(),
+  };
+    return [result]
+
+};
+
+console.log(textIntoObject(firstExample))
+
+
+const multipleTextIntoObject = (string) => {
+  const spliterMesagges = string.split("\n");
+  let mesaggesObjets = [];
+  for (let index = 0; index < spliterMesagges.length; index++) {
+    mesaggesObjets[index] = textIntoObject(spliterMesagges[index]);
+  }
+  return mesaggesObjets;
+};
+
+
+
+module.exports = { textIntoObject, multipleTextIntoObject };
 
