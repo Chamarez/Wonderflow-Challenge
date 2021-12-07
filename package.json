@@ -1,0 +1,14 @@
+{
+  "name": "parse-chat-kata",
+  "version": "1.0.0",
+  "description": "Challenge for Wonderflow",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "M. D. E. Chamarez Richards",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^27.4.3"
+  }
+}
