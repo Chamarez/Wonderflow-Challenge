@@ -16,8 +16,8 @@ const textIntoObject = (string) => {
   mention = string.match(mentionReg);
   allr = string.match(allReg)
   const spliter = string.split(": ");
-
   const type = spliter[0].substring(9, spliter[0].length - 1);
+  console.log(string)
   const result = {
     date: allr.groups.date,
     mention: mention[0],
@@ -28,18 +28,17 @@ const textIntoObject = (string) => {
 
 };
 
-console.log(textIntoObject(firstExample))
-
-
 const multipleTextIntoObject = (string) => {
   const spliterMesagges = string.split("\n");
   let mesaggesObjets = [];
   for (let index = 0; index < spliterMesagges.length; index++) {
     mesaggesObjets[index] = textIntoObject(spliterMesagges[index]);
   }
-  return mesaggesObjets;
+  let mesaggesObjetsArray = [];
+  mesaggesObjetsArray.push(mesaggesObjets[0][0])
+  mesaggesObjetsArray.push(mesaggesObjets[1][0])
+  return mesaggesObjetsArray;
 };
-
 
 
 module.exports = { textIntoObject, multipleTextIntoObject };
