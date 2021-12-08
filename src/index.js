@@ -24,13 +24,13 @@ const dotdateReg = /(.+\.)(\d.+)/;
 const textIntoObject = (string) => {
   mention = string.match(mentionReg);
   allr = string.match(allReg);
-  if(!allr){
-    const subCustomer = 'Customer'
-    const subAgent = 'Agent'
-    if(string.includes(subCustomer)){
-      string = string.replace('Customer', "Customer :")
-    }else if(string.includes(subAgent)){
-      string = string.replace('Agent', "Agent :")
+  if (!allr) {
+    const subCustomer = "Customer";
+    const subAgent = "Agent";
+    if (string.includes(subCustomer)) {
+      string = string.replace("Customer", "Customer :");
+    } else if (string.includes(subAgent)) {
+      string = string.replace("Agent", "Agent :");
     }
   }
   mention = string.match(mentionReg);
@@ -41,10 +41,14 @@ const textIntoObject = (string) => {
     sentence: allr.groups.text,
     type: allr.groups.person.toLowerCase(),
   };
+
   return [result];
 };
+
+
 /////////////////////////////////////////////////////////////////////////////////////////
 const multipleTextIntoObject = (string) => {
+  const comprobationString = string;
   if (string.match(dotdateReg)) {
     let stringDateSplitting = "";
     const stringArray = string.match(dotdateReg);
@@ -57,34 +61,61 @@ const multipleTextIntoObject = (string) => {
     }
     string = stringDateSplitting;
   }
-  if(!string.includes("\n") ){
-    console.log(string)
-    return textIntoObject(string)
-  }else{
-  const spliterMesagges = string.split("\n");
-  let mesaggesObjets = [];
-  for (let index = 0; index < spliterMesagges.length; index++) {
-    mesaggesObjets[index] = textIntoObject(spliterMesagges[index]);
+  if (!string.includes("\n")) {
+    console.log(string);
+    return textIntoObject(string);
+  } else {
+    const spliterMesagges = string.split("\n");
+    let mesaggesObjets = [];
+    for (let index = 0; index < spliterMesagges.length; index++) {
+      mesaggesObjets[index] = textIntoObject(spliterMesagges[index]);
+    }
+    let mesaggesObjetsArray = [];
+    for (let index = 0; index < mesaggesObjets.length; index++) {
+      mesaggesObjetsArray.push(mesaggesObjets[index][0]);
+    }
+    if (mesaggesObjetsArray[0].type == mesaggesObjetsArray[1].type) {
+      mesaggesObjetsArray[0].type = "customer";
+      mesaggesObjetsArray[1].type = "customer";
+    } else if (mesaggesObjetsArray[0].type != "customer") {
+      mesaggesObjetsArray[0].type = "customer";
+    }
+    if (
+      mesaggesObjetsArray[1].type != "customer" &&
+      mesaggesObjetsArray[1].type != "agent"
+    ) {
+      mesaggesObjetsArray[1].type = "agent";
+    }
+
+    if (
+      mesaggesObjetsArray.length > 1 &&
+      !comprobationString.match(dotdateReg)
+    ) {
+      for (let index = 0; index < mesaggesObjetsArray.length - 1; index++) {
+        mesaggesObjetsArray[index].sentence =
+          mesaggesObjetsArray[index].sentence.trimEnd();
+        mesaggesObjetsArray[index].sentence =
+          mesaggesObjetsArray[index].sentence + "\n";
+      }
+      console.log(mesaggesObjetsArray[0]);
+    }
+
+    if (
+      !comprobationString.includes(`Customer :`) &&
+      !comprobationString.includes(`Agent :`) &&
+      !comprobationString.match(mentionReg)
+    ) {
+      for (let index = 0; index < mesaggesObjetsArray.length; index++) {
+        mesaggesObjetsArray[index].mention = mesaggesObjetsArray[
+          index
+        ].mention.substring(0, mesaggesObjetsArray[index].mention.length - 2);
+      }
+    }
+
+    return mesaggesObjetsArray;
   }
-  let mesaggesObjetsArray = [];
-  for (let index = 0; index < mesaggesObjets.length; index++) {
-    mesaggesObjetsArray.push(mesaggesObjets[index][0]);
-  }
-  if (mesaggesObjetsArray[0].type == mesaggesObjetsArray[1].type) {
-    mesaggesObjetsArray[0].type = "customer";
-    mesaggesObjetsArray[1].type = "customer";
-  } else if (mesaggesObjetsArray[0].type != "customer") {
-    mesaggesObjetsArray[0].type = "customer";
-  }
-  if (
-    mesaggesObjetsArray[1].type != "customer" &&
-    mesaggesObjetsArray[1].type != "agent"
-  ) {
-    mesaggesObjetsArray[1].type = "agent";
-  }
-  return mesaggesObjetsArray;
-}
 };
+
 console.log(multipleTextIntoObject(sevenExample));
 
-module.exports = { textIntoObject, multipleTextIntoObject };
+module.exports = multipleTextIntoObject;
