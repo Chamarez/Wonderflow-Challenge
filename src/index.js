@@ -10,6 +10,9 @@ const fiveExample =
   "14:24:32 Customer : Lorem ipsum dolor sit amet, consectetur adipiscing elit.14:26:15 Agent : I received it at 12:24:48, ut blandit lectus.";
 const sixExample =
   "14:24:32 Luca Galasso : Lorem ipsum dolor sit amet, consectetur adipiscing elit.14:26:15 Emanuele Querzola : I received the package, ut blandit lectus.";
+
+const sevenExample =
+  "14:24:32 Customer Lorem ipsum dolor sit amet, consectetur adipiscing elit.14:26:15 Agent I received it at 12:24:48, ut blandit lectus.";
 ///`hh:mm:ss`, `customer/agent name`, `:` and `sentence`
 const dateReg = /(\d{2}:\d{2}:\d{2})/;
 const mentionReg = /(.+\s:\s)/;
@@ -19,6 +22,20 @@ const allReg = /(?<date>\d{2}:\d{2}:\d{2}) (?<person>.+) : (?<text>.+)$/;
 const dotdateReg = /(.+\.)(\d.+)/;
 
 const textIntoObject = (string) => {
+  mention = string.match(mentionReg);
+  allr = string.match(allReg);
+  if(!allr){
+    const subCustomer = 'Customer'
+    const subAgent = 'Agent'
+    if(string.includes(subCustomer)){
+      string = string.replace('Customer', "Customer :")
+      let newObj = string.substring(9, 17);
+    }else if(string.includes(subAgent)){
+      string = string.replace('Agent', "Agent :")
+      let newObj = string.substring(9, 17);
+    }
+
+  }
   mention = string.match(mentionReg);
   allr = string.match(allReg);
   const result = {
@@ -44,9 +61,7 @@ const multipleTextIntoObject = (string) => {
 
     string = stringDateSplitting;
   }
-  console.log(string);
   const spliterMesagges = string.split("\n");
-  console.log(spliterMesagges);
   let mesaggesObjets = [];
   for (let index = 0; index < spliterMesagges.length; index++) {
     mesaggesObjets[index] = textIntoObject(spliterMesagges[index]);
@@ -55,7 +70,6 @@ const multipleTextIntoObject = (string) => {
   for (let index = 0; index < mesaggesObjets.length; index++) {
     mesaggesObjetsArray.push(mesaggesObjets[index][0]);
   }
-  console.log(mesaggesObjetsArray[0].type);
   if (mesaggesObjetsArray[0].type == mesaggesObjetsArray[1].type) {
     mesaggesObjetsArray[0].type = "customer";
     mesaggesObjetsArray[1].type = "customer";
@@ -74,6 +88,6 @@ const multipleTextIntoObject = (string) => {
 
   return mesaggesObjetsArray;
 };
-console.log(multipleTextIntoObject(sixExample));
+console.log(multipleTextIntoObject(sevenExample));
 
 module.exports = { textIntoObject, multipleTextIntoObject };
