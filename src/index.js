@@ -14,10 +14,10 @@ const sixExample =
 const sevenExample =
   "14:24:32 Customer Lorem ipsum dolor sit amet, consectetur adipiscing elit.14:26:15 Agent I received it at 12:24:48, ut blandit lectus.";
 ///`hh:mm:ss`, `customer/agent name`, `:` and `sentence`
-const dateReg = /(\d{2}:\d{2}:\d{2})/;
-const mentionReg = /(.+\s:\s)/;
+/* const dateReg = /\d{2}:\d{2}:\d{2}/;
 const sentenceReg = /(.+):(.+)/;
-const typesReg = /\s.+\s:/;
+const typesReg = /\s.+\s:/; */
+const mentionReg = /(.+\s:\s)/;
 const allReg = /(?<date>\d{2}:\d{2}:\d{2}) (?<person>.+) : (?<text>.+)$/;
 const dotdateReg = /(.+\.)(\d.+)/;
 
@@ -29,12 +29,9 @@ const textIntoObject = (string) => {
     const subAgent = 'Agent'
     if(string.includes(subCustomer)){
       string = string.replace('Customer', "Customer :")
-      let newObj = string.substring(9, 17);
     }else if(string.includes(subAgent)){
       string = string.replace('Agent', "Agent :")
-      let newObj = string.substring(9, 17);
     }
-
   }
   mention = string.match(mentionReg);
   allr = string.match(allReg);
@@ -46,7 +43,7 @@ const textIntoObject = (string) => {
   };
   return [result];
 };
-
+/////////////////////////////////////////////////////////////////////////////////////////
 const multipleTextIntoObject = (string) => {
   if (string.match(dotdateReg)) {
     let stringDateSplitting = "";
@@ -58,9 +55,12 @@ const multipleTextIntoObject = (string) => {
         stringDateSplitting = `${stringDateSplitting}\n${stringArray[index]}`;
       }
     }
-
     string = stringDateSplitting;
   }
+  if(!string.includes("\n") ){
+    console.log(string)
+    return textIntoObject(string)
+  }else{
   const spliterMesagges = string.split("\n");
   let mesaggesObjets = [];
   for (let index = 0; index < spliterMesagges.length; index++) {
@@ -73,20 +73,17 @@ const multipleTextIntoObject = (string) => {
   if (mesaggesObjetsArray[0].type == mesaggesObjetsArray[1].type) {
     mesaggesObjetsArray[0].type = "customer";
     mesaggesObjetsArray[1].type = "customer";
-    console.log("entro");
   } else if (mesaggesObjetsArray[0].type != "customer") {
     mesaggesObjetsArray[0].type = "customer";
-    console.log("customer");
   }
-
   if (
     mesaggesObjetsArray[1].type != "customer" &&
     mesaggesObjetsArray[1].type != "agent"
   ) {
     mesaggesObjetsArray[1].type = "agent";
   }
-
   return mesaggesObjetsArray;
+}
 };
 console.log(multipleTextIntoObject(sevenExample));
 
