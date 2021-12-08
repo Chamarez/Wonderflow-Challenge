@@ -1,4 +1,4 @@
-const multipleTextIntoObject = require("../index.js");
+const multipleTextIntoObject = require("../controllers/chat.controller");
 
 const firstExample =
   "14:24:32 Customer : Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
@@ -123,3 +123,4 @@ test('six step test', () => {
 test('seven step test', () => {
   expect(multipleTextIntoObject(sevenExample)).toEqual(seventhOuput);
 }); 
+
