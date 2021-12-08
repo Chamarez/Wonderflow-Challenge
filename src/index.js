@@ -25,16 +25,11 @@ const textIntoObject = (string) => {
   mention = string.match(mentionReg);
   allr = string.match(allReg);
   if (!allr) {
-    const subCustomer = "Customer";
-    const subAgent = "Agent";
-    if (string.includes(subCustomer)) {
-      string = string.replace("Customer", "Customer :");
-    } else if (string.includes(subAgent)) {
-      string = string.replace("Agent", "Agent :");
-    }
+    string = fixingPerson(string);
   }
   mention = string.match(mentionReg);
   allr = string.match(allReg);
+
   const result = {
     date: allr.groups.date,
     mention: mention[0],
@@ -44,22 +39,28 @@ const textIntoObject = (string) => {
 
   return [result];
 };
+/* 
+////////////////////////////////////////////////////////////
+if the person missing colon this function will add
+ */
+const fixingPerson = (string) => {
+  const subCustomer = "Customer";
+  const subAgent = "Agent";
 
+  string = string.includes(subCustomer)
+    ? string.replace("Customer", "Customer :")
+    : string.includes(subAgent)
+    ? string.replace("Agent", "Agent :")
+    : string;
+
+  return string;
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////
 const multipleTextIntoObject = (string) => {
   const comprobationString = string;
   if (string.match(dotdateReg)) {
-    let stringDateSplitting = "";
-    const stringArray = string.match(dotdateReg);
-    for (let index = 1; index < stringArray.length; index++) {
-      if (index == 1) {
-        stringDateSplitting = `${stringArray[index]}`;
-      } else {
-        stringDateSplitting = `${stringDateSplitting}\n${stringArray[index]}`;
-      }
-    }
-    string = stringDateSplitting;
+    string = divideSentence(string);
   }
   if (!string.includes("\n")) {
     console.log(string);
@@ -86,36 +87,60 @@ const multipleTextIntoObject = (string) => {
     ) {
       mesaggesObjetsArray[1].type = "agent";
     }
-
     if (
       mesaggesObjetsArray.length > 1 &&
       !comprobationString.match(dotdateReg)
     ) {
-      for (let index = 0; index < mesaggesObjetsArray.length - 1; index++) {
-        mesaggesObjetsArray[index].sentence =
-          mesaggesObjetsArray[index].sentence.trimEnd();
-        mesaggesObjetsArray[index].sentence =
-          mesaggesObjetsArray[index].sentence + "\n";
-      }
-      console.log(mesaggesObjetsArray[0]);
+      mesaggesObjetsArray = newLineInSentence(mesaggesObjetsArray);
     }
-
     if (
       !comprobationString.includes(`Customer :`) &&
       !comprobationString.includes(`Agent :`) &&
       !comprobationString.match(mentionReg)
     ) {
-      for (let index = 0; index < mesaggesObjetsArray.length; index++) {
-        mesaggesObjetsArray[index].mention = mesaggesObjetsArray[
-          index
-        ].mention.substring(0, mesaggesObjetsArray[index].mention.length - 2);
-      }
+      mesaggesObjetsArray = removeColonToMention(mesaggesObjetsArray);
     }
 
     return mesaggesObjetsArray;
   }
 };
 
-console.log(multipleTextIntoObject(sevenExample));
+const divideSentence = (string)=>{
+  let stringDateSplitting = "";
+  const stringArray = string.match(dotdateReg);
+  for (let index = 1; index < stringArray.length; index++) {
+    console.log(stringArray[index])
+    if (index == 1) {
+      stringDateSplitting = `${stringArray[index]}`;
+    } else {
+      stringDateSplitting = `${stringDateSplitting}\n${stringArray[index]}`;
+    }
+  }
+  string = stringDateSplitting;
+  return string;
 
+}
+
+
+const newLineInSentence = (mesaggesObjetsArray) => {
+  for (let index = 0; index < mesaggesObjetsArray.length - 1; index++) {
+    mesaggesObjetsArray[index].sentence =
+      mesaggesObjetsArray[index].sentence.trimEnd();
+    mesaggesObjetsArray[index].sentence =
+      mesaggesObjetsArray[index].sentence + "\n";
+  }
+  return mesaggesObjetsArray;
+};
+
+const removeColonToMention = (mesaggesObjetsArray) => {
+  for (let index = 0; index < mesaggesObjetsArray.length; index++) {
+    mesaggesObjetsArray[index].mention = mesaggesObjetsArray[
+      index
+    ].mention.substring(0, mesaggesObjetsArray[index].mention.length - 2);
+  }
+  return mesaggesObjetsArray;
+};
+
+
+console.log(multipleTextIntoObject(fourExample))
 module.exports = multipleTextIntoObject;
