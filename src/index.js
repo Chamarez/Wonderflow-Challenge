@@ -2,7 +2,7 @@ const firstExample =
   "14:24:32 Customer : Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
 const secondExample =
   "14:24:32 Customer : Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n14:26:15 Agent : Aliquam non cursus erat, ut blandit lectus.";
-
+const thirdExample = "14:24:32 Customer : Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n14:27:00 Customer : Pellentesque cursus maximus felis, pharetra porta purus aliquet viverra. \n14:27:47 Agent : Vestibulum tempor diam eu leo molestie eleifend. \n14:28:28 Customer : Contrary to popular belief, Lorem Ipsum is not simply random text."
 ///`hh:mm:ss`, `customer/agent name`, `:` and `sentence`
 const dateReg = /(\d{2}:\d{2}:\d{2})/;
 const mentionReg = /(.+\s:\s)/;
@@ -35,11 +35,14 @@ const multipleTextIntoObject = (string) => {
     mesaggesObjets[index] = textIntoObject(spliterMesagges[index]);
   }
   let mesaggesObjetsArray = [];
-  mesaggesObjetsArray.push(mesaggesObjets[0][0])
-  mesaggesObjetsArray.push(mesaggesObjets[1][0])
+  for (let index = 0; index < mesaggesObjets.length; index++){
+    mesaggesObjetsArray.push(mesaggesObjets[index][0])
+  }
   return mesaggesObjetsArray;
 };
 
+
+console.log(multipleTextIntoObject(firstExample))
 
 module.exports = { textIntoObject, multipleTextIntoObject };
 
