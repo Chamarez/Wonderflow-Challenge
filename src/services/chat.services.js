@@ -41,7 +41,9 @@ const fixingPerson = (string) => {
   return string;
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////
+/* 
+This function check differents forms of string and adapt them to be process
+ */
 
 const comprobation = (string, comprobationString) => {
   const spliterMesagges = string.split("\n");
@@ -93,6 +95,9 @@ const divideSentence = (string) => {
   return string;
 };
 
+/* 
+this function add /n in all sentences exepct in the last one
+ */
 const newLineInSentence = (mesaggesObjetsArray) => {
   for (let index = 0; index < mesaggesObjetsArray.length - 1; index++) {
     mesaggesObjetsArray[index].sentence =
@@ -103,6 +108,9 @@ const newLineInSentence = (mesaggesObjetsArray) => {
   return mesaggesObjetsArray;
 };
 
+/* 
+when is necesary this function removed the colon in mention.
+ */
 const removeColonToMention = (mesaggesObjetsArray) => {
   for (let index = 0; index < mesaggesObjetsArray.length; index++) {
     mesaggesObjetsArray[index].mention = mesaggesObjetsArray[
