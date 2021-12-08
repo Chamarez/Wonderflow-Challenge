@@ -4,6 +4,7 @@
   "description": "Challenge for Wonderflow",
   "main": "index.js",
   "scripts": {
+    "start": "node src/index.js",
     "test": "jest --verbose"
   },
   "author": "M. D. E. Chamarez Richards",

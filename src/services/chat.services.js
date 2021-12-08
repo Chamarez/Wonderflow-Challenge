@@ -1,4 +1,3 @@
-
 ///`hh:mm:ss`, `customer/agent name`, `:` and `sentence`
 /* const dateReg = /\d{2}:\d{2}:\d{2}/;
 const sentenceReg = /(.+):(.+)/;
@@ -44,8 +43,7 @@ const fixingPerson = (string) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-const comprobation = (string, comprobationString)=>{
-
+const comprobation = (string, comprobationString) => {
   const spliterMesagges = string.split("\n");
   let mesaggesObjets = [];
   for (let index = 0; index < spliterMesagges.length; index++) {
@@ -67,10 +65,7 @@ const comprobation = (string, comprobationString)=>{
   ) {
     mesaggesObjetsArray[1].type = "agent";
   }
-  if (
-    mesaggesObjetsArray.length > 1 &&
-    !comprobationString.match(dotdateReg)
-  ) {
+  if (mesaggesObjetsArray.length > 1 && !comprobationString.match(dotdateReg)) {
     mesaggesObjetsArray = newLineInSentence(mesaggesObjetsArray);
   }
   if (
@@ -82,10 +77,9 @@ const comprobation = (string, comprobationString)=>{
   }
 
   return mesaggesObjetsArray;
-}
+};
 
-
-const divideSentence = (string)=>{
+const divideSentence = (string) => {
   let stringDateSplitting = "";
   const stringArray = string.match(dotdateReg);
   for (let index = 1; index < stringArray.length; index++) {
@@ -97,8 +91,7 @@ const divideSentence = (string)=>{
   }
   string = stringDateSplitting;
   return string;
-
-}
+};
 
 const newLineInSentence = (mesaggesObjetsArray) => {
   for (let index = 0; index < mesaggesObjetsArray.length - 1; index++) {
@@ -119,5 +112,14 @@ const removeColonToMention = (mesaggesObjetsArray) => {
   return mesaggesObjetsArray;
 };
 
-
-module.exports = {allReg,comprobation,divideSentence,dotdateReg,fixingPerson,mentionReg,newLineInSentence,removeColonToMention,textIntoObject};
+module.exports = {
+  allReg,
+  comprobation,
+  divideSentence,
+  dotdateReg,
+  fixingPerson,
+  mentionReg,
+  newLineInSentence,
+  removeColonToMention,
+  textIntoObject,
+};
